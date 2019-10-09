@@ -4,6 +4,7 @@ public class Main {
     public static int total;
     public static int maxQue;
     public static double maxTime = 480;
+    public static int numServer;
 
     public static ArrayList<Customer> arriveList = new ArrayList<>();
 
@@ -13,9 +14,13 @@ public class Main {
         Server.mu = scanner.nextDouble();
         total = scanner.nextInt();
         maxQue = scanner.nextInt();
+        numServer = scanner.nextInt();
+        TreeSet<Server> servers = new TreeSet<>();
+        for (int i = 1; i <= numServer; i++) {
+            servers.add(new Server());
+        }
         double curTime = 0;
         Queue<Customer> queue = new LinkedList<>();
-        Server server = new Server();
         for (int i = 1; i <= total; i++) {
             Customer curCustomer = new Customer(curTime);
             arriveList.add(curCustomer);
@@ -24,14 +29,20 @@ public class Main {
                 break;
             }
             while (true) {
-                server.update(curTime);
-                if (server.busy || queue.isEmpty()) {
+                Server minServer = servers.first();
+                servers.remove(minServer);
+                minServer.update(curTime);
+                servers.add(minServer);
+                if (servers.first().busy || queue.isEmpty()) {
                     break;
                 }
-                server.serve(queue.poll(), server.freeTime);
+                minServer = servers.first();
+                servers.remove(minServer);
+                minServer.serve(queue.poll(), minServer.freeTime);
+                servers.add(minServer);
             }
             System.out.println(curTime + ": 顾客 " + curCustomer.id + " 到达了");
-            if (server.busy) {
+            if (servers.first().busy) {
                 if (queue.size() >= maxQue) {
                     System.out.println(curTime + ": 队列人数已满, 顾客 " + curCustomer.id + " 离开了");
                 } else {
@@ -39,14 +50,20 @@ public class Main {
                     System.out.println(curTime + ": 顾客 " + curCustomer.id + " 进入了队列");
                 }
             } else {
-                server.serve(curCustomer, curTime);
+                Server minServer = servers.first();
+                servers.remove(minServer);
+                minServer.serve(curCustomer, curTime);
+                servers.add(minServer);
             }
         }
-        while (!queue.isEmpty() || server.busy) {
-            server.update(Double.POSITIVE_INFINITY);
+        while (!queue.isEmpty() || servers.first().busy) {
+            Server minServer = servers.first();
+            servers.remove(minServer);
+            minServer.update(Double.POSITIVE_INFINITY);
             if (!queue.isEmpty()) {
-                server.serve(queue.poll(), server.freeTime);
+                minServer.serve(queue.poll(), minServer.freeTime);
             }
+            servers.add(minServer);
         }
     }
 }

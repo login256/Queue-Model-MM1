@@ -37,13 +37,14 @@ public class Server implements Comparable<Server> {
     @Override
     public int compareTo(Server o) {
         if (!this.busy && !o.busy) {
-            return 0;
+            return Integer.compare(this.id, o.id);
         } else if (!this.busy && o.busy) {
             return -1;
         } else if (this.busy && !o.busy) {
             return 1;
         } else {
-            return Double.compare(this.freeTime, o.freeTime);
+            int k = Double.compare(this.freeTime, o.freeTime);
+            return k != 0 ? k : Integer.compare(this.id, o.id);
         }
     }
 }
