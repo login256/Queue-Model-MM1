@@ -31,7 +31,8 @@ public class Main {
             while (true) {
                 Server minServer = servers.first();
                 servers.remove(minServer);
-                minServer.update(curTime);
+                double v = minServer.update(curTime);
+                Statisticer.sumQueS += v * queue.size();
                 servers.add(minServer);
                 if (servers.first().busy || queue.isEmpty()) {
                     break;
@@ -59,11 +60,16 @@ public class Main {
         while (!queue.isEmpty() || servers.first().busy) {
             Server minServer = servers.first();
             servers.remove(minServer);
-            minServer.update(Double.POSITIVE_INFINITY);
+            double v = minServer.update(Double.POSITIVE_INFINITY);
+            curTime = minServer.freeTime;
+            Statisticer.sumQueS += v * queue.size();
             if (!queue.isEmpty()) {
                 minServer.serve(queue.poll(), minServer.freeTime);
             }
             servers.add(minServer);
         }
+        System.out.println(Statisticer.sumWaitTime / Statisticer.cntCustomer);
+        System.out.println(Statisticer.sumQueS / curTime);
+        System.out.println(Statisticer.sumSerS / curTime);
     }
 }
