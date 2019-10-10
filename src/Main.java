@@ -24,7 +24,8 @@ public class Main {
                 break;
             }
             while (true) {
-                server.update(curTime);
+                double v = server.update(curTime);
+                Statisticer.sumQueS += v * queue.size();
                 if (server.busy || queue.isEmpty()) {
                     break;
                 }
@@ -43,10 +44,15 @@ public class Main {
             }
         }
         while (!queue.isEmpty() || server.busy) {
-            server.update(Double.POSITIVE_INFINITY);
+            double v = server.update(Double.POSITIVE_INFINITY);
+            Statisticer.sumQueS += v * queue.size();
+            curTime = server.freeTime;
             if (!queue.isEmpty()) {
                 server.serve(queue.poll(), server.freeTime);
             }
         }
+        System.out.println(Statisticer.sumWaitTime / Statisticer.cntCustomer);
+        System.out.println(Statisticer.sumQueS / curTime);
+        System.out.println(Statisticer.sumSerS / curTime);
     }
 }
