@@ -7,7 +7,7 @@ public class Customer {
     public int id;
     public double timeAfterLast;
     public double arriveTime;
-    public double serve_time;
+    public double serveTime;
 
     private int getPoisson() {
         double L = Math.exp(-lambda);
