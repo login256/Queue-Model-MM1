@@ -14,19 +14,26 @@ public class Server implements Comparable<Server> {
     }
 
     public void serve(Customer customer, double curTime) {
-        customer.serve_time = curTime;
+        customer.serveTime = curTime;
         busy = true;
         curCustomer = customer;
         freeTime = curTime + generateTime();
         System.out.println(curTime + ": 窗口 " + id + " 开始了 对顾客 " + curCustomer.id + " 的服务");
     }
 
-    public void update(double curTime) {
+    public double update(double curTime) {
+        double re = 0;
         if (busy && freeTime < curTime) {
             busy = false;
+            double dtime = freeTime - curCustomer.serveTime;
+            Statisticer.sumWaitTime += freeTime - curCustomer.arriveTime;
+            Statisticer.sumSerS += dtime;
+            re = dtime;
+            Statisticer.cntCustomer++;
             System.out.println(freeTime + ": 窗口 " + id + " 结束了 对顾客 " + curCustomer.id + " 的服务");
             curCustomer = null;
         }
+        return re;
     }
 
     public Server() {
