@@ -69,7 +69,7 @@ public class Main {
             servers.add(minServer);
         }
         System.out.println(Statisticer.sumWaitTime / Statisticer.cntCustomer);
-        System.out.println(Statisticer.sumQueS / curTime);
-        System.out.println(Statisticer.sumSerS / curTime);
+        System.out.println(Statisticer.sumQueS / curTime / numServer);
+        System.out.println(Statisticer.sumSerS / curTime / numServer);
     }
 }
