@@ -29,15 +29,17 @@ public class Main {
                 if (server.busy || queue.isEmpty()) {
                     break;
                 }
+                System.out.println(server.freeTime + " " + (queue.size() - 1));
                 server.serve(queue.poll(), server.freeTime);
             }
-            System.out.println(curTime + ": 顾客 " + curCustomer.id + " 到达了");
+            //System.out.println(curTime + ": 顾客 " + curCustomer.id + " 到达了");
             if (server.busy) {
                 if (queue.size() >= maxQue) {
-                    System.out.println(curTime + ": 队列人数已满, 顾客 " + curCustomer.id + " 离开了");
+                    //System.out.println(curTime + ": 队列人数已满, 顾客 " + curCustomer.id + " 离开了");
                 } else {
                     queue.add(curCustomer);
-                    System.out.println(curTime + ": 顾客 " + curCustomer.id + " 进入了队列");
+                    System.out.println(curTime + " " + queue.size());
+                    //System.out.println(curTime + ": 顾客 " + curCustomer.id + " 进入了队列");
                 }
             } else {
                 server.serve(curCustomer, curTime);
@@ -48,6 +50,7 @@ public class Main {
             Statisticer.sumQueS += v * queue.size();
             curTime = server.freeTime;
             if (!queue.isEmpty()) {
+                System.out.println(server.freeTime + " " + (queue.size() - 1));
                 server.serve(queue.poll(), server.freeTime);
             }
         }

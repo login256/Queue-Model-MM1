@@ -18,7 +18,7 @@ public class Server implements Comparable<Server> {
         busy = true;
         curCustomer = customer;
         freeTime = curTime + generateTime();
-        System.out.println(curTime + ": 窗口 " + id + " 开始了 对顾客 " + curCustomer.id + " 的服务");
+        //System.out.println(curTime + ": 窗口 " + id + " 开始了 对顾客 " + curCustomer.id + " 的服务");
     }
 
     public double update(double curTime) {
@@ -30,7 +30,7 @@ public class Server implements Comparable<Server> {
             Statisticer.sumSerS += dtime;
             re = dtime;
             Statisticer.cntCustomer++;
-            System.out.println(freeTime + ": 窗口 " + id + " 结束了 对顾客 " + curCustomer.id + " 的服务");
+            //System.out.println(freeTime + ": 窗口 " + id + " 结束了 对顾客 " + curCustomer.id + " 的服务");
             curCustomer = null;
         }
         return re;
